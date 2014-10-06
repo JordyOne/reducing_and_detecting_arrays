@@ -10,87 +10,36 @@ class Students
   end
 
   def average_age
-    # all.inject(0) { |sum_of_ages, student| sum_of_ages + student[:age] } / all.length
-    all.reduce(0) { |sum_of_ages, student| sum_of_ages + student[:age] } / all.length
-
-    # sum_of_ages = 0
-    # all.each do |student|
-    #   sum_of_ages = sum_of_ages + student[:age]
-    # end
-    #
-    # sum_of_ages/all.length
+    age = 0
+    all.each do |student|
+      age += student[:age]
+    end
+    age/(all.length)
   end
 
   def name_string
-    all.reduce("") { |accumulator, student| accumulator + student[:name] + " " }.strip
-    # all.map { |student| student[:name] }.join(' ')
+    all.map do |student|
+      student[:name]
+    end.join(' ')
   end
 
   def find_first_older_than(age)
-    # all.each do |student|
-    #   if student[:age] > age
-    #     return student
-    #   end
-    # end
-
-    all.detect { |student| student[:age] > age }
+    all.select { |student| student[:age] > age }.first
   end
 
   def any_older_than?(age)
-    all.any? { |student| student[:age] > age }
-
-    # all.each do |student|
-    #   if student[:age] > age
-    #     return true
-    #   end
-    # end
-    # false
+    all.select { |student| student[:age] > age }.length > 0
   end
 
-  def find_student(student_to_find)
-    all.detect { |student| student == student_to_find }
-
-    # all.each do |student|
-    #   if student == student_to_find
-    #     return student
-    #   end
-    # end
-    # nil
+  def find_student(student)
+    all.select { |object| student == object }.first
   end
 
-  def student_present?(student_to_find)
-    all.include?(student_to_find)
-
-    # all.each do |student|
-    #   if student == student_to_find
-    #     return true
-    #   end
-    # end
-    # false
+  def student_present?(student)
+    all.include?(student)
   end
 
   def grouped_by_age
-    # This is a little less clear and
-    # may be an anti-pattern depending
-    # on who you talk to
-    all.inject({}) do |acc, student|
-      if  acc[student[:age]] == nil
-        acc[student[:age]] = []
-      end
-      acc[student[:age]] << student[:name]
-      acc
-    end
-
-    # I (MikeG) prefers this solution because it
-    # is a bit more clear in my head
-    # acc = {}
-    #
-    # all.each do |student|
-    #   if  acc[student[:age]] == nil
-    #     acc[student[:age]] = []
-    #   end
-    #   acc[student[:age]] << student[:name]
-    # end
-    # acc
+    all.group_by { |student| student[:age] }
   end
 end
