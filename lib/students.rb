@@ -11,16 +11,12 @@ class Students
 
   def average_age
     age = 0
-    all.each do |student|
-      age += student[:age]
-    end
+    all.each { |student| age += student[:age] }
     age/(all.length)
   end
 
   def name_string
-    all.map do |student|
-      student[:name]
-    end.join(' ')
+    all.map { |student| student[:name] }.join(' ')
   end
 
   def find_first_older_than(age)
@@ -40,6 +36,10 @@ class Students
   end
 
   def grouped_by_age
-    all.group_by { |student| student[:age] }
+    all.group_by { |student| student[:age] }.inject({}) do |h,(k,v)|
+      h.merge( { k => (v.map do |i|
+        i[:name]
+      end) } )
+    end
   end
 end
